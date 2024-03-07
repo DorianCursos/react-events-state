@@ -1,31 +1,21 @@
-import { useState } from 'react';
-import { USERS } from '../../constants/users';
+import { useNavigate } from 'react-router-dom';
 
-const Users = () => {
-	const [userCounter, setUserCounter] = useState(0);
-	const currentUser = USERS[userCounter];
-	const isFirstUser = userCounter === 0;
-	const isLastUser = userCounter === USERS.length - 1;
+const Users = ({ users }) => {
+	const navigate = useNavigate();
 
+	if (!users || users.length === 0) return <p>No hay usuarios</p>;
 	return (
 		<>
-			<h1>Slide Users</h1>
-			<img src={currentUser.profileImage} alt='' />
-			<h2>{currentUser.name}</h2>
-			<p>{currentUser.username}</p>
-			<p>{currentUser.email}</p>
-			<button
-				disabled={isFirstUser}
-				onClick={() => setUserCounter(userCounter - 1)}
-			>
-				Previus
-			</button>
-			<button
-				disabled={isLastUser}
-				onClick={() => setUserCounter(userCounter + 1)}
-			>
-				Next
-			</button>
+			{users.map(user => (
+				<div key={user.userId}>
+					<p>
+						{user.name} {user.active ? 'Active' : 'Inactive'}
+					</p>
+					<button onClick={() => navigate(`/user/${user.userId}`)}>
+						Ver detalles
+					</button>
+				</div>
+			))}
 		</>
 	);
 };
